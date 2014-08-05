@@ -1,5 +1,6 @@
 package br.com.wofsolutions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -19,11 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
+import br.com.wofsolutions.adapter.NewAdapter;
 import br.com.wofsolutions.db.RepositorioCodex;
 import br.com.wofsolutions.model.Livro;
+import br.com.wofsolutions.model.Parte;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -56,7 +58,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerListView;
+	private ExpandableListView mDrawerListView;
 	private View mFragmentContainerView;
 
 	private int mCurrentSelectedPosition = 0;
@@ -85,6 +87,9 @@ public class NavigationDrawerFragment extends Fragment {
 
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
+		
+		
+		
 	}
 
 	@Override
@@ -98,7 +103,13 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mDrawerListView = (ListView) inflater.inflate(
+	
+		if (container == null) {
+			inflater.inflate(R.layout.custom_drawer_item, null);
+		}
+		
+		
+		mDrawerListView = (ExpandableListView) inflater.inflate(
 				R.layout.fragment_navigation_drawer, container, false);
 		mDrawerListView
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,27 +122,26 @@ public class NavigationDrawerFragment extends Fragment {
 		
 		
 		
-RepositorioCodex repositorioCodex = new RepositorioCodex(inflater.getContext());
 		
-		
-		
-		List<Livro> livros=repositorioCodex.findAll();
-		String[] items =new String[livros.size()];
-		int i=0;
-		for(Livro livro: livros){
-			items[i]=livro.getDescricao();
-			i++;
+		RepositorioCodex repositorioCodex = new RepositorioCodex(
+				inflater.getContext());	
+		List<Parte> partes = new ArrayList<Parte>();
+		List<Livro> livros = repositorioCodex.findAllLivro();
+
+		for (Livro livro : livros) {
+			partes = repositorioCodex.findCanoneByParte(livro.getLivroId());
+			livro.setPartes(partes);
 		}
-		
-		
-		//add as opcoes
-		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(),
-				android.R.layout.simple_list_item_activated_1,
-				android.R.id.text1, items));
-		
-		
-		
+
+		// add as opcoes
+		// mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
+		// .getThemedContext(),
+		// android.R.layout.simple_list_item_activated_1,
+		// android.R.id.text1, items));
+
+		mDrawerListView.setAdapter(new NewAdapter(inflater.getContext(),
+				livros));
+
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
 	}

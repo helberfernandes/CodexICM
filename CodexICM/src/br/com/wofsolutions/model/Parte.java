@@ -23,6 +23,29 @@ public class Parte {
 		
 	private List<Canone> canones = new ArrayList<Canone>();
 
+	
+	
+	
+	
+	public Parte() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Parte(Integer parteId, String descricao) {
+		super();
+		this.parteId = parteId;
+		this.descricao = descricao;
+	}
+	public Parte(Integer parteId, String descricao, Livro livro,
+			List<Capitulo> capitulos, List<Seccao> seccaos, List<Canone> canones) {
+		super();
+		this.parteId = parteId;
+		this.descricao = descricao;
+		this.livro = livro;
+		this.capitulos = capitulos;
+		this.seccaos = seccaos;
+		this.canones = canones;
+	}
 	public String getDescricao() {
 		return descricao;
 	}

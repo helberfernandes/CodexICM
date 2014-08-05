@@ -1,40 +1,30 @@
 package br.com.wofsolutions;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import br.com.wofsolutions.db.RepositorioCodex;
-import br.com.wofsolutions.model.Artigo;
-import br.com.wofsolutions.model.Canone;
-import br.com.wofsolutions.model.Capitulo;
-import br.com.wofsolutions.model.Livro;
-import br.com.wofsolutions.model.Parte;
-import br.com.wofsolutions.model.Seccao;
-import br.com.wofsolutions.model.Titulo;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.res.AssetManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import br.com.wofsolutions.db.RepositorioCodex;
+import br.com.wofsolutions.model.Canone;
+import br.com.wofsolutions.model.Livro;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
-
+	ListView listView;
 	private static List<Livro> livros = new ArrayList<Livro>();
 	
 	/**
@@ -63,6 +53,7 @@ public class MainActivity extends Activity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		
 		
+		listView = (ListView)findViewById(R.id.listCanone);
 		
 	
 	}
@@ -83,9 +74,25 @@ public class MainActivity extends Activity implements
 	}
 
 	public void onSectionAttached(int number) {
+	
+		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
 		switch (number) {
 		case 1:
 			mTitle = getString(R.string.title_section1);
+			List<Canone> canones=repositorioCodex.findCanoneByLivro(number);
+			
+			List<String> list = new ArrayList<String>();
+			for(Canone canone: canones){
+				
+				list.add(canone.getDescricao());
+			}
+			
+			StableArrayAdapter adapter = new StableArrayAdapter(this,
+			        android.R.layout.simple_list_item_1, list);
+             
+            //relaciona o dataSource ao próprio listview
+            listView.setAdapter(adapter);
+			
 			break;
 		case 2:
 			mTitle = getString(R.string.title_section2);
@@ -181,3 +188,29 @@ public class MainActivity extends Activity implements
 	}
 
 }
+
+class StableArrayAdapter extends ArrayAdapter<String> {
+
+    HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+    public StableArrayAdapter(Context context, int textViewResourceId,
+        List<String> objects) {
+      super(context, textViewResourceId, objects);
+      for (int i = 0; i < objects.size(); ++i) {
+        mIdMap.put(objects.get(i), i);
+      }
+    }
+
+    @Override
+    public long getItemId(int position) {
+      String item = getItem(position);
+      return mIdMap.get(item);
+    }
+
+    @Override
+    public boolean hasStableIds() {
+      return true;
+    }
+
+  }
+

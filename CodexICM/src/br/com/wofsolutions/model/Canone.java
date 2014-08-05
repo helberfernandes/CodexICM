@@ -36,6 +36,32 @@ public class Canone implements Serializable {
 	
 	private Artigo artigo;
 	
+	
+	
+	
+	public Canone() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Canone(Integer canoneId, String numero, String descricao) {
+		super();
+		this.canoneId = canoneId;
+		this.numero = numero;
+		this.descricao = descricao;
+	}
+	public Canone(Integer canoneId, String numero, String descricao,
+			Livro livro, Titulo titulo, Capitulo capitulo, Parte parte,
+			Artigo artigo) {
+		super();
+		this.canoneId = canoneId;
+		this.numero = numero;
+		this.descricao = descricao;
+		this.livro = livro;
+		this.titulo = titulo;
+		this.capitulo = capitulo;
+		this.parte = parte;
+		this.artigo = artigo;
+	}
 	public Integer getCanoneId() {
 		return canoneId;
 	}
