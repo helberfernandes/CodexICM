@@ -31,6 +31,14 @@ public class Parte {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	public Parte(Integer parteId) {
+		super();
+		this.parteId = parteId;
+	}
+
+
 	public Parte(Integer parteId, String descricao) {
 		super();
 		this.parteId = parteId;
@@ -81,6 +89,33 @@ public class Parte {
 	}
 	public void setCanones(List<Canone> canones) {
 		this.canones = canones;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((parteId == null) ? 0 : parteId.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Parte other = (Parte) obj;
+		if (parteId == null) {
+			if (other.parteId != null)
+				return false;
+		} else if (!parteId.equals(other.parteId))
+			return false;
+		return true;
 	}
 	
 	

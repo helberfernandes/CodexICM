@@ -37,6 +37,11 @@ public class Canone implements Serializable {
 	private Artigo artigo;
 	
 	
+	private boolean grupoCanone=false;
+	
+	
+	private boolean grupoCanoneTitulo=false;
+	private boolean grupoCanoneCapitulo=false;
 	
 	
 	public Canone() {
@@ -109,6 +114,24 @@ public class Canone implements Serializable {
 	}
 	public void setArtigo(Artigo artigo) {
 		this.artigo = artigo;
+	}
+	public boolean isGrupoCanone() {
+		return grupoCanone;
+	}
+	public void setGrupoCanone(boolean grupoCanone) {
+		this.grupoCanone = grupoCanone;
+	}
+	public boolean isGrupoCanoneTitulo() {
+		return grupoCanoneTitulo;
+	}
+	public void setGrupoCanoneTitulo(boolean grupoCanoneTitulo) {
+		this.grupoCanoneTitulo = grupoCanoneTitulo;
+	}
+	public boolean isGrupoCanoneCapitulo() {
+		return grupoCanoneCapitulo;
+	}
+	public void setGrupoCanoneCapitulo(boolean grupoCanoneCapitulo) {
+		this.grupoCanoneCapitulo = grupoCanoneCapitulo;
 	}
 	
 	

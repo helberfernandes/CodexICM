@@ -19,6 +19,16 @@ public class Artigo {
 	
 	
 	
+	public Artigo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Artigo(Integer artigoId) {
+		super();
+		this.artigoId = artigoId;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}

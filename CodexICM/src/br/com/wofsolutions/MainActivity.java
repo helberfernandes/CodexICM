@@ -11,6 +11,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,13 +19,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import br.com.wofsolutions.adapter.CanoneAdapter;
+import br.com.wofsolutions.adapter.MyCustomAdapter;
+import br.com.wofsolutions.adapter.NewAdapter;
 import br.com.wofsolutions.db.RepositorioCodex;
 import br.com.wofsolutions.model.Canone;
 import br.com.wofsolutions.model.Livro;
+import br.com.wofsolutions.model.Parte;
 
 public class MainActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 	ListView listView;
+	
 	private static List<Livro> livros = new ArrayList<Livro>();
 	
 	/**
@@ -54,7 +60,7 @@ public class MainActivity extends Activity implements
 		
 		
 		listView = (ListView)findViewById(R.id.listCanone);
-		
+		 
 	
 	}
 	
@@ -72,47 +78,99 @@ public class MainActivity extends Activity implements
 				.replace(R.id.container,
 						PlaceholderFragment.newInstance(position + 1)).commit();
 	}
-
+	
 	public void onSectionAttached(int number) {
 	
-		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
+		Log.i("cdc", "numero "+number);
+		
 		switch (number) {
 		case 1:
-			mTitle = getString(R.string.title_section1);
-			List<Canone> canones=repositorioCodex.findCanoneByLivro(number);
-			
-			List<String> list = new ArrayList<String>();
-			for(Canone canone: canones){
-				
-				list.add(canone.getDescricao());
-			}
-			
-			StableArrayAdapter adapter = new StableArrayAdapter(this,
-			        android.R.layout.simple_list_item_1, list);
-             
-            //relaciona o dataSource ao próprio listview
-            listView.setAdapter(adapter);
-			
+			carregaCanone(number);
 			break;
 		case 2:
-			mTitle = getString(R.string.title_section2);
+			carregaCanone(number);
 			break;
 		case 3:
-			mTitle = getString(R.string.title_section3);
+			carregaCanone(number);
 			break;
 		case 4:
-			mTitle = getString(R.string.title_section1);
+			carregaCanone(number);
 			break;
 		case 5:
-			mTitle = getString(R.string.title_section2);
+			carregaCanone(number);
 			break;
 		case 6:
-			mTitle = getString(R.string.title_section3);
+			carregaCanone(number);
 			break;			
 		case 7:
-			mTitle = getString(R.string.title_section1);
+			carregaCanone(number);
 			break;	
 		}
+	}
+	
+	List<Canone> canones = new ArrayList<Canone>();
+	public void carregaCanone(int number){
+		try{
+		mTitle=((Livro)mNavigationDrawerFragment.getmDrawerListView().getAdapter().getItem(number-1)).getDescricao();
+		}catch(ClassCastException ex){
+			mTitle=((Parte)mNavigationDrawerFragment.getmDrawerListView().getAdapter().getItem(number-1)).getDescricao();
+		}
+		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
+		
+		canones.clear();
+		canones=repositorioCodex.findCanoneByLivro(number);
+		
+		int parteId=0;
+		int tituloId=0;
+		int capituloId=0;
+		for(Canone canone: canones){
+			
+			
+			if(canone.getParte().getParteId()!=parteId ){//encontrando o agrupamento das partes
+				//adapter.addSeparatorItem(canone);
+				
+				canone.setGrupoCanone(true);
+				parteId=canone.getParte().getParteId();
+				
+				Log.i("cdc", "PArte add "+parteId+" canone "+canone.getNumero());
+			}else{
+				canone.setGrupoCanone(false);
+				//adapter.addItem(canone);
+			}
+			
+			
+			
+			
+			if(canone.getTitulo().getTituloId()!=tituloId ){
+				//adapter.addSeparatorItem(canone);
+				
+				canone.setGrupoCanoneTitulo(true);
+				tituloId=canone.getTitulo().getTituloId();
+				
+				
+			}else{
+				canone.setGrupoCanoneTitulo(false);
+				//adapter.addItem(canone);
+			}
+			
+			
+
+			if(canone.getCapitulo().getCapituloId()!=capituloId ){
+				//adapter.addSeparatorItem(canone);
+				
+				canone.setGrupoCanoneCapitulo(true);
+				capituloId=canone.getCapitulo().getCapituloId();
+				
+				
+			}else{
+				canone.setGrupoCanoneCapitulo(false);
+				//adapter.addItem(canone);
+			}
+		}
+	
+		
+        //relaciona o dataSource ao próprio listview
+        listView.setAdapter(new CanoneAdapter(MainActivity.this, canones));
 	}
 
 	public void restoreActionBar() {

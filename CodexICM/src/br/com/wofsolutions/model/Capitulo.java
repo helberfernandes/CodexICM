@@ -26,6 +26,22 @@ public class Capitulo {
 	private List<Artigo> artigos = new ArrayList<Artigo>();
 	
 	
+	
+	public Capitulo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Capitulo(Integer capituloId) {
+		super();
+		this.capituloId = capituloId;
+	}
+	
+	
+	public Capitulo(Integer capituloId, String descricao) {
+		super();
+		this.capituloId = capituloId;
+		this.descricao = descricao;
+	}
 	public Integer getCapituloId() {
 		return capituloId;
 	}

@@ -25,7 +25,25 @@ public class Titulo {
 	
 	private Seccao seccao;
 	
+	
+	
+	
 
+	public Titulo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Titulo(Integer tituloId) {
+		super();
+		this.tituloId = tituloId;
+	}
+	
+	
+	public Titulo(Integer tituloId, String descricao) {
+		super();
+		this.tituloId = tituloId;
+		this.descricao = descricao;
+	}
 	public String getDescricao() {
 		return descricao;
 	}

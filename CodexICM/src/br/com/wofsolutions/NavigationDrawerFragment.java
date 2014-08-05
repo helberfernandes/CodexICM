@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.Toast;
 import br.com.wofsolutions.adapter.NewAdapter;
 import br.com.wofsolutions.db.RepositorioCodex;
@@ -85,6 +87,8 @@ public class NavigationDrawerFragment extends Fragment {
 			mFromSavedInstanceState = true;
 		}
 
+		
+		Log.i("cdc", "teste "+mCurrentSelectedPosition);
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
 		
@@ -111,15 +115,27 @@ public class NavigationDrawerFragment extends Fragment {
 		
 		mDrawerListView = (ExpandableListView) inflater.inflate(
 				R.layout.fragment_navigation_drawer, container, false);
-		mDrawerListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						selectItem(position);
-					}
-				});
+//		mDrawerListView
+//				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//					@Override
+//					public void onItemClick(AdapterView<?> parent, View view,
+//							int position, long id) {
+//						Log.i("cdc", "posicao 2"+ position);
+//						selectItem(position);
+//					}
+//				});
 		
+		mDrawerListView.setOnGroupClickListener(new OnGroupClickListener() {
+
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v,
+					int groupPosition, long id) {
+				Log.i("cdc", "posicao 2"+ groupPosition);
+				selectItem(groupPosition);
+				return false;
+			}
+			
+		});
 		
 		
 		
@@ -241,6 +257,9 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void selectItem(int position) {
+		
+		
+		
 		mCurrentSelectedPosition = position;
 		if (mDrawerListView != null) {
 			mDrawerListView.setItemChecked(position, true);
@@ -337,4 +356,14 @@ public class NavigationDrawerFragment extends Fragment {
 		 */
 		void onNavigationDrawerItemSelected(int position);
 	}
+
+	public ExpandableListView getmDrawerListView() {
+		return mDrawerListView;
+	}
+
+	public void setmDrawerListView(ExpandableListView mDrawerListView) {
+		this.mDrawerListView = mDrawerListView;
+	}
+	
+	
 }
