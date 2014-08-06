@@ -6,10 +6,19 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/txtCanoneDescricao"
+        android:id="@+id/txtPalavra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtParteTitulo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/txtSignificado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txtPalavra"
         android:text="TextView" />
 
 </RelativeLayout>

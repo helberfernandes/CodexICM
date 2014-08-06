@@ -43,11 +43,21 @@ public class Canone implements Serializable {
 	private boolean grupoCanoneTitulo=false;
 	private boolean grupoCanoneCapitulo=false;
 	
+	private boolean grupoCanoneArtigo=false;
+	
 	
 	public Canone() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	public Canone(Integer canoneId) {
+		super();
+		this.canoneId = canoneId;
+	}
+
+
 	public Canone(Integer canoneId, String numero, String descricao) {
 		super();
 		this.canoneId = canoneId;
@@ -132,6 +142,40 @@ public class Canone implements Serializable {
 	}
 	public void setGrupoCanoneCapitulo(boolean grupoCanoneCapitulo) {
 		this.grupoCanoneCapitulo = grupoCanoneCapitulo;
+	}
+	public boolean isGrupoCanoneArtigo() {
+		return grupoCanoneArtigo;
+	}
+	public void setGrupoCanoneArtigo(boolean grupoCanoneArtigo) {
+		this.grupoCanoneArtigo = grupoCanoneArtigo;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((canoneId == null) ? 0 : canoneId.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Canone other = (Canone) obj;
+		if (canoneId == null) {
+			if (other.canoneId != null)
+				return false;
+		} else if (!canoneId.equals(other.canoneId))
+			return false;
+		return true;
 	}
 	
 	

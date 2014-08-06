@@ -18,8 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import br.com.wofsolutions.adapter.CanoneAdapter;
+import br.com.wofsolutions.adapter.GlossarioAdapter;
 import br.com.wofsolutions.adapter.MyCustomAdapter;
 import br.com.wofsolutions.adapter.NewAdapter;
 import br.com.wofsolutions.db.RepositorioCodex;
@@ -28,7 +31,7 @@ import br.com.wofsolutions.model.Livro;
 import br.com.wofsolutions.model.Parte;
 
 public class MainActivity extends Activity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks {
+		NavigationDrawerFragment.NavigationDrawerCallbacks, NavigationDrawerFragment.NavigationDrawerCallbacksSubItem {
 	ListView listView;
 	
 	private static List<Livro> livros = new ArrayList<Livro>();
@@ -59,6 +62,40 @@ public class MainActivity extends Activity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		
 		
+		
+		
+		
+		mNavigationDrawerFragment.getmDrawerListView().setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v,
+					int groupPosition, int childPosition, long id) {
+				Parte parte = mNavigationDrawerFragment.getAdapter().getChild(groupPosition, childPosition);   
+				
+				
+				int number =(groupPosition+1);
+				if (number==8) {// glossario
+					
+					
+				
+					carregaCanoneGlossarioDetalhe(parte);
+					mNavigationDrawerFragment.getmDrawerLayout().closeDrawer(mNavigationDrawerFragment.getmFragmentContainerView());
+				}else{
+				
+					
+				carregaCanoneParte(parte);
+				
+				
+				mNavigationDrawerFragment.getmDrawerLayout().closeDrawer(mNavigationDrawerFragment.getmFragmentContainerView());
+				
+				}
+				
+				
+				
+			
+				return false;
+			}
+		});
 		listView = (ListView)findViewById(R.id.listCanone);
 		 
 	
@@ -78,6 +115,17 @@ public class MainActivity extends Activity implements
 				.replace(R.id.container,
 						PlaceholderFragment.newInstance(position + 1)).commit();
 	}
+	
+	
+//	@Override
+//	public void onNavigationDrawerItemSelectedSubItem(int position) {
+//		// update the main content by replacing fragments
+//		FragmentManager fragmentManager = getFragmentManager();
+//		fragmentManager
+//				.beginTransaction()
+//				.replace(R.id.container,
+//						PlaceholderFragment.newInstance(position + 1)).commit();
+//	}
 	
 	public void onSectionAttached(int number) {
 	
@@ -105,16 +153,23 @@ public class MainActivity extends Activity implements
 		case 7:
 			carregaCanone(number);
 			break;	
+		case 8:
+			carregaTodoGlossario();
+			
+			break;	
 		}
 	}
 	
 	List<Canone> canones = new ArrayList<Canone>();
 	public void carregaCanone(int number){
-		try{
-		mTitle=((Livro)mNavigationDrawerFragment.getmDrawerListView().getAdapter().getItem(number-1)).getDescricao();
-		}catch(ClassCastException ex){
-			mTitle=((Parte)mNavigationDrawerFragment.getmDrawerListView().getAdapter().getItem(number-1)).getDescricao();
-		}
+		
+		mTitle=mNavigationDrawerFragment.getAdapter().getGroup(number-1).getDescricao();
+//		
+//		try{
+//		mTitle=((Livro)mNavigationDrawerFragment.getmDrawerListView().getAdapter().getItem(number-1)).getDescricao();
+//		}catch(ClassCastException ex){
+//			mTitle=((Parte)mNavigationDrawerFragment.getmDrawerListView().getAdapter().getItem(number-1)).getDescricao();
+//		}
 		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
 		
 		canones.clear();
@@ -123,6 +178,7 @@ public class MainActivity extends Activity implements
 		int parteId=0;
 		int tituloId=0;
 		int capituloId=0;
+		int artigoId=0;
 		for(Canone canone: canones){
 			
 			
@@ -166,12 +222,154 @@ public class MainActivity extends Activity implements
 				canone.setGrupoCanoneCapitulo(false);
 				//adapter.addItem(canone);
 			}
+			
+			
+			
+			
+			if(canone.getArtigo().getArtigoId()!=artigoId ){
+			
+				
+				canone.setGrupoCanoneArtigo(true);
+				artigoId=canone.getArtigo().getArtigoId();
+				
+				
+			}else{
+				canone.setGrupoCanoneArtigo(false);
+				//adapter.addItem(canone);
+			}
 		}
 	
 		
         //relaciona o dataSource ao próprio listview
         listView.setAdapter(new CanoneAdapter(MainActivity.this, canones));
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public void carregaCanoneParte(Parte parte){
+		
+		mTitle=parte.getLivro().getDescricao();
+		
+		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
+		
+		canones.clear();
+		canones=repositorioCodex.findCanoneByParte(parte.getParteId());
+		
+		int parteId=0;
+		int tituloId=0;
+		int capituloId=0;
+		int artigoId=0;
+		for(Canone canone: canones){
+			
+			
+			if(canone.getParte().getParteId()!=parteId ){//encontrando o agrupamento das partes
+				//adapter.addSeparatorItem(canone);
+				
+				canone.setGrupoCanone(true);
+				parteId=canone.getParte().getParteId();
+				
+				Log.i("cdc", "PArte add "+parteId+" canone "+canone.getNumero());
+			}else{
+				canone.setGrupoCanone(false);
+				//adapter.addItem(canone);
+			}
+			
+			
+			
+			
+			if(canone.getTitulo().getTituloId()!=tituloId ){
+				//adapter.addSeparatorItem(canone);
+				
+				canone.setGrupoCanoneTitulo(true);
+				tituloId=canone.getTitulo().getTituloId();
+				
+				
+			}else{
+				canone.setGrupoCanoneTitulo(false);
+				//adapter.addItem(canone);
+			}
+			
+			
+
+			if(canone.getCapitulo().getCapituloId()!=capituloId ){
+				//adapter.addSeparatorItem(canone);
+				
+				canone.setGrupoCanoneCapitulo(true);
+				capituloId=canone.getCapitulo().getCapituloId();
+				
+				
+			}else{
+				canone.setGrupoCanoneCapitulo(false);
+				//adapter.addItem(canone);
+			}
+			
+			
+			
+			
+			if(canone.getArtigo().getArtigoId()!=artigoId ){
+			
+				
+				canone.setGrupoCanoneArtigo(true);
+				artigoId=canone.getArtigo().getArtigoId();
+				
+				
+			}else{
+				canone.setGrupoCanoneArtigo(false);
+				//adapter.addItem(canone);
+			}
+		}
+	
+		
+        //relaciona o dataSource ao próprio listview
+        listView.setAdapter(new CanoneAdapter(MainActivity.this, canones));
+	}
+	
+	
+	
+	
+	public void carregaTodoGlossario(){
+		
+		mTitle="GLOSSÁRIO";
+		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
+		
+		canones.clear();
+		canones=repositorioCodex.findAllGlossarioAsCanone();
+		
+	
+		
+	
+		
+        //relaciona o dataSource ao próprio listview
+        listView.setAdapter(new GlossarioAdapter(MainActivity.this, canones));
+	}
+	
+	
+	public void carregaCanoneGlossarioDetalhe(Parte parte){
+		mTitle=parte.getDescricao();
+		RepositorioCodex repositorioCodex = new RepositorioCodex(this);
+		
+		canones.clear();
+		//canones=repositorioCodex.findAllGlossarioAsCanone(parte.getParteId());
+		canones=repositorioCodex.findAllGlossarioAsCanone();
+
+        listView.setAdapter(new GlossarioAdapter(MainActivity.this, canones, new Canone(parte.getParteId()), listView));
+        
+        listView.setSelectionFromTop(canones.indexOf(new Canone(parte.getParteId())), 10);
+        
+		
+	}
+	
 
 	public void restoreActionBar() {
 		ActionBar actionBar = getActionBar();

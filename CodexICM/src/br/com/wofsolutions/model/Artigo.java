@@ -24,6 +24,16 @@ public class Artigo {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
+	
+	public Artigo(Integer artigoId, String descricao) {
+		super();
+		this.artigoId = artigoId;
+		this.descricao = descricao;
+	}
+
+
+
 	public Artigo(Integer artigoId) {
 		super();
 		this.artigoId = artigoId;

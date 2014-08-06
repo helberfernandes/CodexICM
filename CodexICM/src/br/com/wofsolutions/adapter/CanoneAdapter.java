@@ -85,6 +85,10 @@ public class CanoneAdapter extends BaseAdapter {
 		
 		if (mData.get(position).isGrupoCanone()) {
 
+			if(mData.get(position).getNumero().equals("204")){
+				Log.i("cdc", "erro "+mData.get(position).getParte().getDescricao());
+			}
+			
 			gridView = inflater.inflate(R.layout.listcanonesparte, null);
 
 			textView = (TextView) gridView.findViewById(R.id.txtParteTitulo);
@@ -97,6 +101,18 @@ public class CanoneAdapter extends BaseAdapter {
 			// textView.setVisibility(TextView.VISIBLE);
 			
 
+			if(mData.get(position).isGrupoCanoneCapitulo()){
+				textView = (TextView) gridView
+						.findViewById(R.id.txtpartecapitulo);
+
+				textView.setText(mData.get(position).getCapitulo().getDescricao());
+				textView.setTypeface(null, Typeface.BOLD);
+				textView.setVisibility(TextView.VISIBLE);
+			}
+			
+			
+			
+			
 			textView = (TextView) gridView
 					.findViewById(R.id.txtCanoneDescricaoParte);
 
@@ -152,6 +168,19 @@ public class CanoneAdapter extends BaseAdapter {
 				textView.setBackgroundColor(CanoneAdapter.COR_BARRA_CINZA);
 				// textView.setVisibility(TextView.VISIBLE);
 				
+				
+				if(mData.get(position).isGrupoCanoneArtigo()){
+					textView = (TextView) gridView
+							.findViewById(R.id.txtCapituloArtigo);
+
+					textView.setText(mData.get(position).getArtigo().getDescricao());
+					textView.setTypeface(null, Typeface.BOLD);
+					textView.setVisibility(TextView.VISIBLE);
+					
+				}else{
+					textView.setVisibility(TextView.GONE);
+				}
+				
 
 				textView = (TextView) gridView
 						.findViewById(R.id.txtCanoneDescricaoCapitulo);
@@ -159,7 +188,27 @@ public class CanoneAdapter extends BaseAdapter {
 				textView.setText(mData.get(position).getDescricao());
 
 				
-		
+		}else if (mData.get(position).isGrupoCanoneArtigo()) {
+
+					gridView = inflater.inflate(R.layout.listcanonesartigo, null);
+
+					textView = (TextView) gridView.findViewById(R.id.txtTituloArtigo);
+					textView.setText(mData.get(position).getArtigo().getDescricao());
+					
+					
+					textView.setTypeface(null, Typeface.BOLD);
+
+					textView.setBackgroundColor(CanoneAdapter.COR_BARRA_CINZA);
+					// textView.setVisibility(TextView.VISIBLE);
+					
+
+					textView = (TextView) gridView
+							.findViewById(R.id.txtCanoneDescricaoArtigo);
+
+					textView.setText(mData.get(position).getDescricao());
+
+					
+				
 		
 	}else{
 			gridView = inflater.inflate(R.layout.listcanones, null);
@@ -169,8 +218,7 @@ public class CanoneAdapter extends BaseAdapter {
 		}
 		
 
-		Log.i("Canone", "" + mData.get(position).getNumero() + " parte "
-				+ mData.get(position).getParte().getParteId());
+		
 
 		// se o canone conciver a mesma parte exibe so o canone pois foi exibido
 		// a parte

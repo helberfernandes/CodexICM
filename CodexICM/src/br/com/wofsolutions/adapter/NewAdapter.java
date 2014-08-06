@@ -206,7 +206,7 @@ public class NewAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return false;
+		return true;
 	}
 
 	private static class DrawerItemHolder {

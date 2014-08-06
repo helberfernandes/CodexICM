@@ -44,6 +44,25 @@ public class Parte {
 		this.parteId = parteId;
 		this.descricao = descricao;
 	}
+	
+	
+	
+	
+	public Parte(Integer parteId, String descricao, Livro livro) {
+		super();
+		this.parteId = parteId;
+		this.descricao = descricao;
+		this.livro = livro;
+	}
+
+
+	public Parte(Integer parteId, Livro livro) {
+		super();
+		this.parteId = parteId;
+		this.livro = livro;
+	}
+
+
 	public Parte(Integer parteId, String descricao, Livro livro,
 			List<Capitulo> capitulos, List<Seccao> seccaos, List<Canone> canones) {
 		super();
